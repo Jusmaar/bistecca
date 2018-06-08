@@ -12,6 +12,11 @@ export class AsistenciaComponent implements OnInit {
   segundoReloj: any;
   s: any;
   myDate:any;
+  menuBoolean:boolean=false;
+  loaderBoolean:boolean=false;
+  messageBoolean:boolean=false;
+  dataFake:boolean=false;
+  menssage:string='Usuario encontrado exitosamente!';
   constructor() {
    }
 
@@ -33,5 +38,32 @@ export class AsistenciaComponent implements OnInit {
       console.log(this.myDate); // just testing if it is working
     }, 1000);
   }
-  
+  showMenu(){
+    this.menuBoolean = !this.menuBoolean;
+  }
+  showMessage(text:string){
+    this.menssage = text;
+    this.messageBoolean = true;
+    setTimeout(()=>{
+      this.messageBoolean = false;
+      console.log(this.messageBoolean)
+    },2500)
+  }
+  marcarAsistencia(){
+    this.loaderBoolean = true;
+    this.dataFake = false;
+    setTimeout(()=>{
+      this.loaderBoolean = false;
+      this.showMessage('Asistencia registrada exitosamente!');
+    },1200)
+  }
+  marcarIngreso(){
+    this.menssage='';
+    this.loaderBoolean = true;
+    this.dataFake = true;
+    setTimeout(()=>{
+      this.loaderBoolean = false;
+      this.showMessage('Usuario encontrado exitosamente!');
+    },1200)
+  }
 }
