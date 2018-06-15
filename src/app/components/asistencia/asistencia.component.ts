@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import axios from 'axios'
 
 @Component({
   selector: 'app-asistencia',
@@ -10,22 +11,25 @@ export class AsistenciaComponent implements OnInit {
   horaReloj: any;
   minutoReloj: any;
   segundoReloj: any;
+  userObj: Object[];
+  id: any;
   s: any;
-  myDate:any;
-  menuBoolean:boolean=false;
-  loaderBoolean:boolean=false;
-  messageBoolean:boolean=false;
-  dataFake:boolean=false;
-  menssage:string='Usuario encontrado exitosamente!';
+  myDate: any;
+  menuBoolean: boolean = false;
+  loaderBoolean: boolean = false;
+  messageBoolean: boolean = false;
+  dataFake: boolean = false;
+  idName: string = ''
+  menssage: string = 'Usuario encontrado exitosamente!';
   constructor() {
-   }
+  }
 
   ngOnInit() {
-    setInterval(() => {         //replaced function() by ()=>
-      this.myDate = new Date();
-      this.horaReloj = this.myDate.getHours();
-      this.minutoReloj = this.myDate.getMinutes();
-      this.segundoReloj = this.myDate.getSeconds();
+    this.userObj = []
+    this.id = 46;
+    console.log('this.userObj', this.userObj)
+
+     /* this.segundoReloj = this.myDate.getSeconds();
       console.log(this.minutoReloj/10)
       if((this.minutoReloj/10) < 1){
         console.log('v')
@@ -35,35 +39,68 @@ export class AsistenciaComponent implements OnInit {
         console.log('v')
         this.segundoReloj = '0'+this.segundoReloj
       }
-      console.log(this.myDate); // just testing if it is working
-    }, 1000);
+      console.log(this.horaReloj, this.minutoReloj); // just testing if it is working
+      */
   }
-  showMenu(){
+  showMenu() {
     this.menuBoolean = !this.menuBoolean;
   }
-  showMessage(text:string){
+  showMessage(text: string) {
     this.menssage = text;
     this.messageBoolean = true;
-    setTimeout(()=>{
+    setTimeout(() => {
       this.messageBoolean = false;
       console.log(this.messageBoolean)
-    },2500)
+    }, 2500)
   }
-  marcarAsistencia(){
+  marcarAsistencia() {
     this.loaderBoolean = true;
     this.dataFake = false;
-    setTimeout(()=>{
-      this.loaderBoolean = false;
-      this.showMessage('Asistencia registrada exitosamente!');
-    },1200)
+
+    axios.post('http://localhost:8000/asistence', {
+      "Detalle": "Detalle",
+      "idUsuario": 1,
+      "idReferencia": 1,
+      "idLocal": 1    })
+      .then( ({data}) => {
+        this.showMessage('Asistencia registrada exitosamente!');
+        this.loaderBoolean = false;
+      })
+      .catch( (error) => {
+        this.loaderBoolean = false;
+        this.showMessage('Encontro un error!');
+    });
+
   }
-  marcarIngreso(){
-    this.menssage='';
+
+  marcarSalida(){
+    this.myDate = new Date();
+    this.horaReloj = this.myDate.getHours();
+    this.minutoReloj = this.myDate.getMinutes();
+    this.userObj[0]['hSalida'] = this.horaReloj + ':' + this.minutoReloj 
+  }
+
+  marcarIngreso(idValue) {
+    this.menssage = '';
     this.loaderBoolean = true;
     this.dataFake = true;
-    setTimeout(()=>{
-      this.loaderBoolean = false;
-      this.showMessage('Usuario encontrado exitosamente!');
-    },1200)
+    this.idName = '1';
+    this.userObj = [];
+    console.log(this.id)
+    axios.get(`http://localhost:8000/users/${idValue}`)
+      .then(({ data }) => {
+        this.loaderBoolean = false;
+        this.myDate = new Date();
+        this.horaReloj = this.myDate.getHours();
+        this.minutoReloj = this.myDate.getMinutes();
+        data.data.hInicio =  this.horaReloj + ':' + this.minutoReloj 
+        this.userObj.push(data.data)
+        this.showMessage('Usuario encontrado exitosamente!');
+      })
+      .catch(function (error) {
+        this.loaderBoolean = false;
+        this.showMessage('Usuario No Fue Encontrado!');
+        console.log(error);
+      });
   }
 }

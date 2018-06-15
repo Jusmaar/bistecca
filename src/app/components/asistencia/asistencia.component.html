@@ -40,14 +40,15 @@
         <span>ASISTENCIA</span>
       </h1>
       <div class="input-container-sc">
-        <span class="label-input">Ingrese su codigo: </span>
+        <span class="label-input" >Ingrese su codigo: </span>
         <div class="input-content">
-          <input type="text" name="" id="" placeholder="HQPQWE31">
+          <input type="text"  #idInput>
+          <p> {{id}}</p>
         </div>
       </div>
       <div class="buttons-container-sc">
-        <button (click)="marcarIngreso()">Marcar ingreso</button>
-        <button>Marcar salida</button>
+        <button (click)="marcarIngreso(idInput.value)">Marcar ingreso</button>
+        <button (click)="marcarSalida()">Marcar salida</button>
       </div>
       <div class="table-container-sc">
         <table>
@@ -70,14 +71,16 @@
               <td>---</td>
               <td>---</td>
             </tr>
-            <tr *ngIf="dataFake">
-              <td>Jusmar</td>
-              <td>CAS</td>
-              <td>Chef</td>
-              <td>ABCD123</td>
-              <td>--</td>
-              <td>--</td>
-            </tr>
+            <ng-container  *ngIf="dataFake" >
+              <tr *ngFor="let user of userObj">
+                <td>{{user.Nombres}}</td>
+                <td>{{user.idRol}}</td>
+                <td>{{user.hInicio}}</td>
+                <td>{{user.hSalida}}</td>
+                <td>--</td>
+                <td>--</td>
+              </tr>
+            </ng-container >
           </tbody>
         </table>
       </div>
