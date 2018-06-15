@@ -12,8 +12,9 @@ export class AsistenciaComponent implements OnInit {
   minutoReloj: any;
   segundoReloj: any;
   userObj: Object[];
+  rolesObjec: Object[];
   id: any;
-  s: any;
+  role: any;
   myDate: any;
   menuBoolean: boolean = false;
   loaderBoolean: boolean = false;
@@ -26,6 +27,11 @@ export class AsistenciaComponent implements OnInit {
 
   ngOnInit() {
     this.userObj = []
+    this.rolesObjec = [
+      { name: 'Cocinaero', id: 1 },
+      { name: 'Mesero', id: 2 },
+      { name: 'Administrador', id: 3 }
+    ];
     this.id = 46;
     console.log('this.userObj', this.userObj)
 
@@ -56,14 +62,14 @@ export class AsistenciaComponent implements OnInit {
   marcarAsistencia() {
     this.loaderBoolean = true;
     this.dataFake = false;
-
     axios.post('http://localhost:8000/asistence', {
-      "Detalle": "Detalle",
-      "idUsuario": 1,
-      "idReferencia": 1,
+      "Detalle": "Marca de Asistencia",
+      "idUsuario": this.userObj[0]['idUsuario'],
+      "idReferencia": this.userObj[0]['idReferencia'],
       "idLocal": 1    })
       .then( ({data}) => {
         this.showMessage('Asistencia registrada exitosamente!');
+        console.log('asistencia ok')
         this.loaderBoolean = false;
       })
       .catch( (error) => {
@@ -73,11 +79,29 @@ export class AsistenciaComponent implements OnInit {
 
   }
 
-  marcarSalida(){
-    this.myDate = new Date();
-    this.horaReloj = this.myDate.getHours();
-    this.minutoReloj = this.myDate.getMinutes();
-    this.userObj[0]['hSalida'] = this.horaReloj + ':' + this.minutoReloj 
+  marcarSalida(idValue){
+    this.menssage = '';
+    this.loaderBoolean = true;
+    this.dataFake = true;
+    this.idName = '1';
+    this.userObj = [];
+    axios.get(`http://localhost:8000/users/${idValue}`)
+      .then(({ data }) => {
+        this.loaderBoolean = false;
+        this.myDate = new Date();
+        this.horaReloj = this.myDate.getHours();
+        this.minutoReloj = this.myDate.getMinutes();
+        data.data.hSalida =  this.horaReloj + ':' + this.minutoReloj
+        data.data.idReferencia = 2
+        data.data.rolName = this.getRole(data.data.idRol)
+        this.userObj.push(data.data)
+        this.showMessage('Usuario encontrado exitosamente!');
+      })
+      .catch(function (error) {
+        this.loaderBoolean = false;
+        this.showMessage('Usuario No Fue Encontrado!');
+        console.log(error);
+      });
   }
 
   marcarIngreso(idValue) {
@@ -93,7 +117,10 @@ export class AsistenciaComponent implements OnInit {
         this.myDate = new Date();
         this.horaReloj = this.myDate.getHours();
         this.minutoReloj = this.myDate.getMinutes();
-        data.data.hInicio =  this.horaReloj + ':' + this.minutoReloj 
+        data.data.hInicio =  this.horaReloj + ':' + this.minutoReloj
+        data.data.idReferencia = 1
+        data.data.rolName = this.getRole(data.data.idRol)
+        this.getRole(data.data.idRol);
         this.userObj.push(data.data)
         this.showMessage('Usuario encontrado exitosamente!');
       })
@@ -102,5 +129,11 @@ export class AsistenciaComponent implements OnInit {
         this.showMessage('Usuario No Fue Encontrado!');
         console.log(error);
       });
+  }
+
+  private getRole(idRole) {
+    this.role = null
+    this.role = Object.keys(this.rolesObjec).find(k => this.rolesObjec[k].id === idRole)
+    return this.rolesObjec[this.role].name;
   }
 }

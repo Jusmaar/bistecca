@@ -14,7 +14,7 @@
         <a href="">Perfil</a>
       </li>
       <li>
-        <a href="">Salir</a>
+      <a href="">Salir</a>
       </li>
     </ul>
   </nav>
@@ -48,14 +48,13 @@
       </div>
       <div class="buttons-container-sc">
         <button (click)="marcarIngreso(idInput.value)">Marcar ingreso</button>
-        <button (click)="marcarSalida()">Marcar salida</button>
+        <button (click)="marcarSalida(idInput.value)">Marcar salida</button>
       </div>
       <div class="table-container-sc">
         <table>
           <thead>
             <tr>
               <th>Nombre</th>
-              <th>Tipo de contrato</th>
               <th>Rol</th>
               <th>Codigo</th>
               <th>Hora ingreso</th>
@@ -69,16 +68,14 @@
               <td>---</td>
               <td>---</td>
               <td>---</td>
-              <td>---</td>
             </tr>
             <ng-container  *ngIf="dataFake" >
               <tr *ngFor="let user of userObj">
                 <td>{{user.Nombres}}</td>
-                <td>{{user.idRol}}</td>
+                <td>{{user.rolName}}</td>
+                <td>{{user.idUsuario}}</td>
                 <td>{{user.hInicio}}</td>
                 <td>{{user.hSalida}}</td>
-                <td>--</td>
-                <td>--</td>
               </tr>
             </ng-container >
           </tbody>
