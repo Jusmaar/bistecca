@@ -116,6 +116,7 @@
             .input-container-sc{
               padding: 10px 0;
               .label-input{
+                  margin-left: 8%;
                   color: white;
               }
               .input-content{
@@ -214,8 +215,9 @@
               color: white;
               font-size: 40px;
               align-items: center;
+              justify-content: center;
               .hora,.minuto,.segundo{
-                margin: 50px 5px;
+                margin: 20px 5px;
                 background: #fff0f59e;
                 color: white;
                 font-size: 40px;

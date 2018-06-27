@@ -34,19 +34,19 @@ export class AsistenciaComponent implements OnInit {
     ];
     this.id = 46;
     console.log('this.userObj', this.userObj)
+    setInterval(() => {         //replaced function() by ()=>
+      this.myDate = new Date();
+      this.horaReloj = this.myDate.getHours();
+      this.minutoReloj = this.myDate.getMinutes();
+      this.segundoReloj = this.myDate.getSeconds();
+      if ((this.minutoReloj / 10) < 1) {
+        this.minutoReloj = '0' + this.minutoReloj
+      }
+      if ((this.segundoReloj / 10) < 1) {
+        this.segundoReloj = '0' + this.segundoReloj
+      }
+    }, 1000);
 
-     /* this.segundoReloj = this.myDate.getSeconds();
-      console.log(this.minutoReloj/10)
-      if((this.minutoReloj/10) < 1){
-        console.log('v')
-        this.minutoReloj = '0'+this.minutoReloj
-      }
-      if((this.segundoReloj/10) < 1){
-        console.log('v')
-        this.segundoReloj = '0'+this.segundoReloj
-      }
-      console.log(this.horaReloj, this.minutoReloj); // just testing if it is working
-      */
   }
   showMenu() {
     this.menuBoolean = !this.menuBoolean;
@@ -66,20 +66,21 @@ export class AsistenciaComponent implements OnInit {
       "Detalle": "Marca de Asistencia",
       "idUsuario": this.userObj[0]['idUsuario'],
       "idReferencia": this.userObj[0]['idReferencia'],
-      "idLocal": 1    })
-      .then( ({data}) => {
+      "idLocal": 1
+    })
+      .then(({ data }) => {
         this.showMessage('Asistencia registrada exitosamente!');
         console.log('asistencia ok')
         this.loaderBoolean = false;
       })
-      .catch( (error) => {
+      .catch((error) => {
         this.loaderBoolean = false;
         this.showMessage('Encontro un error!');
-    });
+      });
 
   }
 
-  marcarSalida(idValue){
+  marcarSalida(idValue) {
     this.menssage = '';
     this.loaderBoolean = true;
     this.dataFake = true;
@@ -91,7 +92,7 @@ export class AsistenciaComponent implements OnInit {
         this.myDate = new Date();
         this.horaReloj = this.myDate.getHours();
         this.minutoReloj = this.myDate.getMinutes();
-        data.data.hSalida =  this.horaReloj + ':' + this.minutoReloj
+        data.data.hSalida = this.horaReloj + ':' + this.minutoReloj
         data.data.idReferencia = 2
         data.data.rolName = this.getRole(data.data.idRol)
         this.userObj.push(data.data)
@@ -117,7 +118,7 @@ export class AsistenciaComponent implements OnInit {
         this.myDate = new Date();
         this.horaReloj = this.myDate.getHours();
         this.minutoReloj = this.myDate.getMinutes();
-        data.data.hInicio =  this.horaReloj + ':' + this.minutoReloj
+        data.data.hInicio = this.horaReloj + ':' + this.minutoReloj
         data.data.idReferencia = 1
         data.data.rolName = this.getRole(data.data.idRol)
         this.getRole(data.data.idRol);
@@ -134,6 +135,6 @@ export class AsistenciaComponent implements OnInit {
   private getRole(idRole) {
     this.role = null
     this.role = Object.keys(this.rolesObjec).find(k => this.rolesObjec[k].id === idRole)
-    return this.rolesObjec[this.role].name;
+    ∫
   }
 }
